@@ -1,0 +1,173 @@
+
+-- Technical_Project
+-- Project_Title: TechSync Appliance Scheduler
+-- Contributors: Vanshika and Mohammad Amanat Karim
+
+--------------------------------------------------------------------------------------------------
+
+-- Drop Appointment table
+DROP TABLE Appointment;
+
+-- Drop Table Servicing
+DROP TABLE Servicing;
+
+-- Drop Technician table
+DROP TABLE Technician;
+
+-- Drop Customer table
+DROP TABLE Customer;
+
+
+
+-- Creating Customer table
+CREATE TABLE Customer
+(
+    CustomerID INT IDENTITY PRIMARY KEY,
+    CustName VARCHAR(25) NOT NULL,
+    CustAddress VARCHAR(255),
+    PhoneNumber BIGINT NOT NULL,
+    Email VARCHAR(255) UNIQUE,
+	Problem_Description VARCHAR (500) NOT NULL
+);
+
+
+-- Creating Technician table
+CREATE TABLE Technician 
+(
+    TechnicianID INT IDENTITY PRIMARY KEY,
+    TechName VARCHAR(25) NOT NULL,
+	PhoneNumber BIGINT NOT NULL,
+    Email VARCHAR(255) UNIQUE,
+	Years_of_Experience INT
+);
+
+-- Creating Servicing table
+CREATE TABLE Servicing
+(
+    ServicingID INT IDENTITY PRIMARY KEY,
+	ServiceName VARCHAR (50),
+    Cost FLOAT,
+	ServiceDuration VARCHAR (50),
+	TechnicianID INT,
+	FOREIGN KEY (TechnicianID) REFERENCES Technician(TechnicianID)
+);
+
+-- Creating Appointment table
+CREATE TABLE Appointment
+(
+    AppointmentID INT IDENTITY PRIMARY KEY,
+	PaymentStatus VARCHAR (50),
+	Notes VARCHAR (500),
+	AppointmentNumber INT,
+    CustomerID INT,
+	TechnicianID INT,
+	ServicingID INT,
+	FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID),
+	FOREIGN KEY (TechnicianID) REFERENCES Technician(TechnicianID),
+	FOREIGN KEY (ServicingID) REFERENCES Servicing(ServicingID)
+);
+
+-- Populating the Customer Table.`
+INSERT INTO Customer
+VALUES	('ABC', '001 Golf St, ON', '1234567890', 'abc@gmail.com', 'Making humming sound but not working'),
+		('DEF', '002 Golf St, ON', '6566526285', 'def@gmail.com', 'Motor not working'),
+		('GHI', '003 Golf St, ON', '7298682755', 'ghi@gmail.com', 'Does not power on'),
+		('JKL', '004 Golf St, ON', '0582862475', 'jkl@gmail.com', 'Fan not working'),
+		('LMI', '005 Golf St, ON', '0864134686', 'mno@gmail.com', 'Thermostat malfunctions'),
+		('PQR', '006 Lake Rd, NY', '7645378945', 'pqr@gmail.com', 'Makes a loud grinding noise'),
+        	('STU', '007 River Ln, CA', '8563489756', 'stu@gmail.com', 'Heating element broken'),
+        	('VWX', '008 Forest Ave, TX', '9671234567', 'vwx@gmail.com', 'Display not working'),
+        	('YZA', '009 Hill St, WA', '7890123456', 'yza@gmail.com', 'Buttons not responsive'),
+        	('BCD', '010 Beach Blvd, FL', '8902345671', 'bcd@gmail.com', 'Wires are frayed'),
+        	('EFG', '011 Mountain Dr, CO', '9123456780', 'efg@gmail.com', 'Leaks water'),
+        	('HIJ', '012 Valley Path, NV', '2345678901', 'hij@gmail.com', 'Emits a burning smell'),
+        	('KLM', '013 Desert Way, AZ', '3456789012', 'klm@gmail.com', 'Remote control not syncing'),
+        	('NOP', '014 Cloud Cir, OR', '4567890123', 'nop@gmail.com', 'Chassis has cracks'),
+        	('QRS', '015 Snow Rd, VT', '5678901234', 'qrs@gmail.com', 'Power cord damaged');
+
+-- Populating the Technician Table.
+INSERT INTO Technician
+VALUES	('Mike', '7623462719', 'technician1@gmail.com', 3),
+		('Bob', '8366257368', 'technician2@gmail.com', 4),
+		('Duke', '8927637382', 'technician3@gmail.com', 4),
+		('Smith', '7865328917', 'technician4@gmail.com', 9),
+		('Sunny', '7265379807', 'technician5@gmail.com', 5),
+		('Alan', '7456372738', 'technician6@gmail.com', 6),
+        	('Martin', '7892456723', 'technician7@gmail.com', 8),
+        	('Kevin', '7023465720', 'technician8@gmail.com', 7),
+        	('Brad', '7156346271', 'technician9@gmail.com', 2),
+        	('Harry', '7265381726', 'technician10@gmail.com', 10),
+        	('Oliver', '7921354672', 'technician11@gmail.com', 3),
+        	('Jack', '7521346827', 'technician12@gmail.com', 5),
+        	('Charlie', '7023415628', 'technician13@gmail.com', 8),
+        	('George', '7265347621', 'technician14@gmail.com', 4),
+        	('Oscar', '7821546372', 'technician15@gmail.com', 3);
+
+-- Populating the Servicing Table.
+INSERT INTO Servicing (ServiceName, Cost, ServiceDuration, TechnicianID)
+VALUES	('General Maintenance', '499.00', '10 Days', 1),
+		('Circuit Repair', '249.00', '2 Days', 2),
+		('Heating Element Replacement', '999.99', '3 Hours', 3),
+		('Warranty Repair', '0.00', '1 Week', 4),
+		('Hardware Replacement', '1000.00', '1 Month', 5),
+		('General Maintenance', '499.00', '10 Days', 1),
+		('Circuit Repair', '249.00', '2 Days', 2),
+		('Heating Element Replacement', '999.99', '3 Hours', 3),
+		('Warranty Repair', '0.00', '1 Week', 4),
+		('Hardware Replacement', '1000.00', '1 Month', 5),
+		('Software Update', '299.99', '2 Hours', 1),
+		('Battery Replacement', '149.99', '30 Minutes', 2),
+		('Screen Repair', '349.00', '3 Days', 3),
+		('Keyboard Repair', '199.00', '4 Days', 4),
+		('Data Recovery', '699.99', '5 Days', 5);
+
+
+-- Populating the Appointment Table.
+INSERT INTO Appointment (PaymentStatus, Notes, AppointmentNumber, CustomerID, TechnicianID, ServicingID)
+VALUES	('Paid', 'Credit payment, underprocess', 1, 1, 1, 1),
+		('Due', 'Payment Required', 2, 2, 2, 2),
+		('Due', 'Appliance repaired', 3, 3, 3, 3),
+		('Paid', 'Debit payment, pickup required', 4, 4, 4, 4),
+		('Paid', 'Cash payment, Delivered', 5, 5, 5, 5),
+		('Paid', 'Credit payment, under process', 1, 1, 1, 1),
+		('Due', 'Payment Required', 2, 2, 2, 2),
+		('Due', 'Appliance repaired', 3, 3, 3, 3),
+		('Paid', 'Debit payment, pickup required', 4, 4, 4, 4),
+		('Paid', 'Cash payment, Delivered', 5, 5, 5, 5),
+		('Due', 'Check-in store, needs follow-up', 6, 6, 6, 6),
+		('Paid', 'Online payment, installation done', 7, 7, 1, 2),
+		('Due', 'Check-up done, awaiting payment', 8, 8, 2, 3),
+		('Paid', 'EMI payment, documentation required', 9, 9, 3, 4),
+		('Due', 'Service done, payment pending', 10, 10, 4, 5);
+
+
+-- Customer's address has been updated using the where clause.
+UPDATE Customer
+SET CustAddress = '123 New St'
+WHERE Email ='ghi@gmail.com';
+
+SELECT * FROM Customer;
+-- Update Success.
+
+
+-- AppointmentNumber has been updated using the where clause.
+UPDATE Appointment
+SET PaymentStatus = 'Paid'
+WHERE AppointmentNumber = 2;
+
+SELECT * FROM Appointment; 
+-- Update Success.
+
+SELECT * FROM Customer;
+
+UPDATE Customer
+SET CustAddress = '001 Golf St'
+WHERE PhoneNumber = '7298682755';
+
+SELECT * FROM Customer;
+-- Update Success.
+
+Select * from Technician;
+Select * from Customer;
+Select * from Servicing;
+Select * from Appointment;
